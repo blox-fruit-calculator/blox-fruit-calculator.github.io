@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://blox-fruit-calculator.github.io/sitemap.xml

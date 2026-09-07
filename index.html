@@ -3,21 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blox Fruits Trade Calculator — Check If Your Trade Is Fair</title>
-<meta name="description" content="Free Blox Fruits trade calculator. Add your offer and their offer to instantly see if a trade is a win, fair, or a loss. Includes an editable value list for fruits, swords, guns and accessories.">
-<meta name="keywords" content="blox fruits trade calculator, blox fruits value list, blox fruits trading, blox fruits calculator, blox fruits values">
-<link rel="canonical" href="https://bloxfruitcalculator.github.io/">
+<title>Blox Fruits Trade Calculator — Instant Win, Fair or Loss Verdict</title>
+<meta name="description" content="Free Blox Fruits trade calculator. Add your offer and their offer to instantly see if a trade is a win, fair, or a loss. Includes a searchable value list for fruits, swords, guns and accessories, plus scam-safety tips.">
+<meta name="keywords" content="blox fruits trade calculator, blox fruits value list, blox fruits trading, blox fruits calculator, blox fruits values, blox fruits wfl calculator">
+<link rel="canonical" href="https://blox-fruit-calculator.github.io/">
+<meta name="author" content="Blox Fruit Calculator">
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="Blox Fruits Trade Calculator — Check If Your Trade Is Fair">
-<meta property="og:description" content="Add your offer and their offer to instantly see whether a Blox Fruits trade is a win, a loss, or fair.">
-<meta property="og:url" content="https://bloxfruitcalculator.github.io/">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blox Fruits Trade Calculator">
-<meta name="twitter:description" content="Instantly check if your Blox Fruits trade is fair.">
+<meta property="og:title" content="Blox Fruits Trade Calculator — Instant Win, Fair or Loss Verdict">
+<meta property="og:description" content="Add your offer and their offer to instantly see whether a Blox Fruits trade is a win, a loss, or fair. Free, no sign-up, updated value list included.">
+<meta property="og:url" content="https://blox-fruit-calculator.github.io/">
+<meta property="og:image" content="https://blox-fruit-calculator.github.io/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Blox Fruit Calculator">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Blox Fruits Trade Calculator — Instant Win, Fair or Loss Verdict">
+<meta name="twitter:description" content="Instantly check if your Blox Fruits trade is fair. Free calculator with a searchable value list.">
+<meta name="twitter:image" content="https://blox-fruit-calculator.github.io/assets/og-image.png">
 <meta name="robots" content="index, follow">
-<meta name="theme-color" content="#0B1D2E">
+<meta name="theme-color" content="#081722">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -58,6 +69,31 @@
       "@type": "Question",
       "name": "Why isn't my fruit or item in the list?",
       "acceptedAnswer": { "@type": "Answer", "text": "This list focuses on the items traders ask about most often. It's a plain, editable list rather than a live feed, so newly released items may take time to be added." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this site affiliated with Blox Fruits or Roblox?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. This is an independent fan-made tool, not affiliated with or endorsed by the Blox Fruits developers or Roblox Corporation." }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the difference between an item's price and its trade value?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Price is what an item costs to buy directly in-game. Value is what the trading community treats it as being worth in a swap, and the two numbers often don't match at all." }
+    },
+    {
+      "@type": "Question",
+      "name": "Does a permanent fruit trade differently than a normal one?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. A permanent, gamepass-purchased fruit generally trades higher than the same fruit obtained as a normal in-game drop, since it can't be lost on death." }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I avoid getting scammed while trading?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Check the trade with a calculator first, only trade through the in-game trade window that confirms both sides, and be suspicious of anyone rushing you or asking you to go first." }
+    },
+    {
+      "@type": "Question",
+      "name": "How often are the values updated?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The list is maintained by hand rather than pulled from a live market feed. Game updates, new releases, and shifts in community sentiment are the usual triggers for a value to move." }
     }
   ]
 }
@@ -300,6 +336,20 @@
     </div>
   </section>
 
+  <section id="intro" style="padding-top:0;">
+    <div class="wrap" style="max-width:760px;">
+      <p style="color:var(--foam-dim); font-size:1.02rem;">
+        Trading is one of the fastest ways to build up a strong Blox Fruits inventory, but it's also where most new players get taken advantage of. Someone offers a fruit you've never heard of for three of yours, throws in a rushed "trust me, it's worth way more," and suddenly you're not sure if you just made a great deal or gave away half your account for nothing.
+      </p>
+      <p style="color:var(--foam-dim); font-size:1.02rem; margin-top:14px;">
+        This <strong>Blox Fruits trade calculator</strong> exists to take the guesswork out of that moment. Instead of scrolling through a Discord server hoping someone answers your "is this a good trade" question in time, you add both sides of the deal here and get an immediate breakdown: who's ahead, by how much, and whether the gap is big enough to actually matter. It works the same way experienced traders think about a deal — by adding up value on both sides and checking the size of the gap — just faster, and without anyone's opinion getting in the way.
+      </p>
+      <p style="color:var(--foam-dim); font-size:1.02rem; margin-top:14px;">
+        Below the calculator you'll find a full <a href="#values">value list</a> covering the fruits, swords, guns, and accessories traders ask about most, each tagged with a rarity and a demand rating. Demand matters just as much as raw value: a mid-tier fruit that everyone wants can be easier to re-trade than a rare one nobody's asking for. Use both numbers together, not just one, when you're deciding whether to accept.
+      </p>
+    </div>
+  </section>
+
   <section id="calculator">
     <div class="wrap">
       <div class="section-head">
@@ -433,8 +483,24 @@
           <div class="faq-a">The list covers the items traders ask about most. It's maintained by hand rather than pulled from a live feed, so brand-new releases may take a little while to be added.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q">Is this site affiliated with Blox Fruits or Roblox?</div>
+          <div class="faq-q">Is this site affiliated with Blox Fruits or Roblox?<span class="chev">+</span></div>
           <div class="faq-a">No. This is an independent fan-made tool, not affiliated with or endorsed by the Blox Fruits developers or Roblox Corporation.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">What's the difference between an item's price and its trade value?<span class="chev">+</span></div>
+          <div class="faq-a">Price is what an item costs to buy directly in-game with Robux or Beli, if it's even purchasable that way. Value is what the trading community treats it as being worth in a swap — and the two numbers often don't match at all. A gamepass fruit might have a fixed purchase price but trade well above or below that depending on how much demand it currently has.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Does a permanent fruit trade differently than a normal one?<span class="chev">+</span></div>
+          <div class="faq-a">Yes. A permanent (gamepass-purchased) fruit generally trades higher than the same fruit obtained as a normal in-game drop, since it can't be lost on death and carries more long-term value. When you're comparing offers, check whether either side's fruit is permanent before assuming the values are equal.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">How do I avoid getting scammed while trading?<span class="chev">+</span></div>
+          <div class="faq-a">Run the trade through this calculator first so you're not relying on someone else's word. Beyond that: never hand over an item before the in-game trade window confirms both sides, be suspicious of anyone rushing you or claiming a "glitch" means they need your item first, and don't log into third-party sites that promise free items — they're a common way accounts get stolen.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">How often are the values updated?<span class="chev">+</span></div>
+          <div class="faq-a">The list is maintained by hand rather than pulled from a live market feed, so it reflects a snapshot in time rather than minute-by-minute shifts. Big game updates, new fruit releases, and shifts in community sentiment are the usual triggers for a value to move — cross-check with an active trading community if a trade is high-stakes.</div>
         </div>
       </div>
     </div>
