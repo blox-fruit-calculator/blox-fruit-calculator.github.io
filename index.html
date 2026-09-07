@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blox Fruits Trade Calculator — Check If Your Trade Is Fair</title>
+<meta name="description" content="Free Blox Fruits trade calculator. Add your offer and their offer to instantly see if a trade is a win, fair, or a loss. Includes an editable value list for fruits, swords, guns and accessories.">
+<meta name="keywords" content="blox fruits trade calculator, blox fruits value list, blox fruits trading, blox fruits calculator, blox fruits values">
+<link rel="canonical" href="https://bloxfruitcalculator.github.io/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Blox Fruits Trade Calculator — Check If Your Trade Is Fair">
+<meta property="og:description" content="Add your offer and their offer to instantly see whether a Blox Fruits trade is a win, a loss, or fair.">
+<meta property="og:url" content="https://bloxfruitcalculator.github.io/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Blox Fruits Trade Calculator">
+<meta name="twitter:description" content="Instantly check if your Blox Fruits trade is fair.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0B1D2E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Blox Fruits Trade Calculator",
+  "applicationCategory": "GameApplication",
+  "operatingSystem": "Any",
+  "description": "A free calculator that compares the total value of items on each side of a Blox Fruits trade and tells you whether it's a win, fair, or a loss.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How does the Blox Fruits trade calculator decide win or lose?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The calculator adds up the value of every item on your side and every item on the other side, then compares the two totals. If your side is worth noticeably more, the trade is marked a loss for you; if it's worth noticeably less, it's a win; close totals are marked fair." }
+    },
+    {
+      "@type": "Question",
+      "name": "Are the values on this site official Blox Fruits prices?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. Blox Fruits has no official trading prices. The numbers here are community-style estimates meant as a starting point, and they drift as new fruits, updates, and community sentiment shift demand. Always cross-check with an active trading Discord before finalizing a real trade." }
+    },
+    {
+      "@type": "Question",
+      "name": "What does demand mean in a Blox Fruits trade?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Demand describes how many traders currently want an item, on a scale this site shows as Low, Medium, High or Very High. A high-value item with low demand can be harder to re-trade than a lower-value item that everyone wants, so experienced traders weigh demand alongside raw value." }
+    },
+    {
+      "@type": "Question",
+      "name": "Why isn't my fruit or item in the list?",
+      "acceptedAnswer": { "@type": "Answer", "text": "This list focuses on the items traders ask about most often. It's a plain, editable list rather than a live feed, so newly released items may take time to be added." }
+    }
+  ]
+}
+</script>
+
+<style>
+  :root{
+    --ocean-deep: #081722;
+    --ocean-panel: #0F2536;
+    --ocean-panel-2: #143349;
+    --line: #1F435C;
+    --foam: #EAF3F2;
+    --foam-dim: #A9C2C4;
+    --gold: #E9B94D;
+    --teal: #2FD9C4;
+    --coral: #FF7A59;
+    --violet: #9B6BD9;
+    --win: #35C98B;
+    --lose: #E8615B;
+    --fair: #E9B94D;
+    --radius-map: 3px 14px 3px 14px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--ocean-deep);
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(47,217,196,0.07), transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(155,107,217,0.08), transparent 45%);
+    color: var(--foam);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.55;
+  }
+  h1,h2,h3, .display{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    color: var(--foam);
+    margin: 0;
+  }
+  a{ color: var(--teal); }
+  .wrap{ max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  img,svg{ display:block; max-width:100%; }
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  /* ---------- NAV ---------- */
+  header.site{
+    position: sticky; top:0; z-index: 50;
+    background: rgba(8,23,34,0.9);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav{ display:flex; align-items:center; justify-content:space-between; padding: 14px 24px; max-width:1080px; margin:0 auto; }
+  .brand{ display:flex; align-items:center; gap:10px; font-family:'Fraunces',serif; font-weight:600; font-size:1.15rem; color:var(--foam); text-decoration:none; }
+  .brand .mark{ width:26px; height:26px; }
+  .nav-links{ display:flex; gap: 22px; list-style:none; margin:0; padding:0; }
+  .nav-links a{ color: var(--foam-dim); text-decoration:none; font-size:0.95rem; }
+  .nav-links a:hover{ color: var(--foam); }
+  .nav-toggle{ display:none; background:none; border:1px solid var(--line); color:var(--foam); border-radius:6px; padding:6px 10px; }
+  @media (max-width: 720px){
+    .nav-links{ display:none; }
+    .nav-toggle{ display:inline-block; }
+    .nav-links.open{ display:flex; flex-direction:column; position:absolute; top:56px; right:24px; background:var(--ocean-panel); border:1px solid var(--line); padding:14px; border-radius:10px; gap:12px; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{ padding: 64px 0 40px; }
+  .hero-grid{ display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items:center; }
+  @media (max-width: 860px){ .hero-grid{ grid-template-columns:1fr; } }
+  .eyebrow-line{ display:flex; align-items:center; gap:10px; color: var(--teal); font-size:0.85rem; margin-bottom:16px; }
+  .eyebrow-line .rule{ height:1px; width:36px; background: var(--teal); opacity:0.6; }
+  .hero h1{ font-size: clamp(2rem, 4.4vw, 3.1rem); line-height:1.08; letter-spacing: -0.01em; }
+  .hero p.lede{ color: var(--foam-dim); font-size:1.08rem; max-width: 46ch; margin-top:18px; }
+  .hero-cta{ margin-top: 28px; display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{ display:inline-flex; align-items:center; gap:8px; padding: 12px 20px; border-radius: 8px; text-decoration:none; font-weight:600; font-size:0.95rem; border: 1px solid transparent; cursor:pointer; }
+  .btn-primary{ background: var(--teal); color: #06231E; }
+  .btn-primary:hover{ background:#4be7d3; }
+  .btn-ghost{ border-color: var(--line); color: var(--foam); background:transparent; }
+  .btn-ghost:hover{ border-color: var(--teal); }
+
+  /* scale illustration */
+  .scale-svg{ justify-self:center; }
+
+  /* ---------- CALCULATOR ---------- */
+  section{ padding: 56px 0; border-top: 1px solid var(--line); }
+  .section-head{ margin-bottom: 30px; max-width: 60ch; }
+  .section-head h2{ font-size: clamp(1.5rem, 2.6vw, 2rem); }
+  .section-head p{ color: var(--foam-dim); margin-top:10px; }
+
+  .calc-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 780px){ .calc-grid{ grid-template-columns:1fr; } }
+
+  .side{
+    background: var(--ocean-panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-map);
+    padding: 22px;
+  }
+  .side h3{ font-size:1.1rem; display:flex; align-items:center; justify-content:space-between; }
+  .side h3 .pill{ font-family:'Inter',sans-serif; font-weight:600; font-size:0.75rem; padding:3px 9px; border-radius:20px; background: var(--ocean-panel-2); color: var(--foam-dim); }
+  .side.you h3{ color: var(--teal); }
+  .side.them h3{ color: var(--coral); }
+
+  .picker{ margin-top:14px; display:flex; gap:8px; }
+  .picker select{
+    flex:1; background: var(--ocean-panel-2); border:1px solid var(--line); color: var(--foam);
+    padding: 10px 12px; border-radius:8px; font-size:0.95rem;
+  }
+  .picker button{
+    background: var(--ocean-panel-2); border:1px solid var(--line); color: var(--foam);
+    border-radius:8px; padding: 0 16px; font-weight:600; cursor:pointer;
+  }
+  .picker button:hover{ border-color: var(--teal); }
+
+  .item-list{ list-style:none; margin: 16px 0 0; padding:0; display:flex; flex-direction:column; gap:8px; min-height: 40px; }
+  .item-row{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background: var(--ocean-deep); border:1px solid var(--line); border-radius:8px; padding: 9px 12px; font-size:0.9rem;
+  }
+  .item-row .info{ display:flex; flex-direction:column; }
+  .item-row .info .val{ color: var(--gold); font-size:0.8rem; }
+  .item-row .remove{ background:none; border:none; color: var(--foam-dim); cursor:pointer; font-size:1.1rem; line-height:1; }
+  .item-row .remove:hover{ color: var(--lose); }
+  .empty-note{ color: var(--foam-dim); font-size:0.85rem; font-style:italic; padding: 6px 2px; }
+
+  .side-total{ margin-top:16px; padding-top:14px; border-top: 1px dashed var(--line); display:flex; justify-content:space-between; font-weight:600; }
+  .side-total .num{ color: var(--gold); font-family:'Fraunces',serif; }
+
+  .verdict{
+    margin-top: 22px; text-align:center; padding: 22px; border-radius: var(--radius-map);
+    border: 1px solid var(--line); background: var(--ocean-panel);
+  }
+  .verdict .title{ font-family:'Fraunces',serif; font-size:1.6rem; margin-bottom:6px; }
+  .verdict .sub{ color: var(--foam-dim); font-size:0.92rem; }
+  .verdict.win .title{ color: var(--win); }
+  .verdict.lose .title{ color: var(--lose); }
+  .verdict.fair .title{ color: var(--fair); }
+
+  /* ---------- HOW IT WORKS ---------- */
+  .steps{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 780px){ .steps{ grid-template-columns:1fr; } }
+  .step{ background: var(--ocean-panel); border:1px solid var(--line); border-radius: var(--radius-map); padding: 20px; }
+  .step .num{ font-family:'Fraunces',serif; color: var(--teal); font-size:1.5rem; }
+  .step h3{ font-size:1.05rem; margin-top:8px; }
+  .step p{ color: var(--foam-dim); font-size:0.92rem; margin-top:6px; }
+
+  /* ---------- VALUE LIST ---------- */
+  .filters{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px; }
+  .filters input, .filters select{
+    background: var(--ocean-panel-2); border:1px solid var(--line); color:var(--foam);
+    padding:9px 12px; border-radius:8px; font-size:0.9rem;
+  }
+  .filters input{ flex:1; min-width:180px; }
+
+  table.values{ width:100%; border-collapse: collapse; font-size:0.9rem; }
+  table.values th, table.values td{ text-align:left; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  table.values th{ color: var(--foam-dim); font-weight:600; font-size:0.8rem; text-transform: uppercase; letter-spacing:0.03em; cursor:pointer; user-select:none; }
+  table.values th:hover{ color: var(--teal); }
+  table.values tbody tr:hover{ background: rgba(47,217,196,0.04); }
+  .tag{ display:inline-block; padding:2px 9px; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .tag.Mythical{ background: rgba(155,107,217,0.18); color:#C7A9F2; }
+  .tag.Legendary{ background: rgba(233,185,77,0.18); color: var(--gold); }
+  .tag.Rare{ background: rgba(47,217,196,0.16); color: var(--teal); }
+  .tag.Uncommon{ background: rgba(234,243,242,0.1); color: var(--foam-dim); }
+  .demand-dot{ display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; }
+  .table-scroll{ overflow-x:auto; border:1px solid var(--line); border-radius: var(--radius-map); background: var(--ocean-panel); padding: 6px 6px; }
+
+  /* ---------- FAQ ---------- */
+  .faq-item{ border-bottom:1px solid var(--line); padding: 16px 0; }
+  .faq-q{ display:flex; justify-content:space-between; align-items:center; cursor:pointer; font-weight:600; font-size:1rem; gap:16px; }
+  .faq-q .chev{ color: var(--teal); transition: transform 0.2s ease; flex-shrink:0; }
+  .faq-item.open .chev{ transform: rotate(45deg); }
+  .faq-a{ max-height:0; overflow:hidden; color: var(--foam-dim); font-size:0.94rem; transition: max-height 0.25s ease; }
+  .faq-item.open .faq-a{ max-height: 240px; margin-top:10px; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ border-top:1px solid var(--line); padding: 36px 0; color: var(--foam-dim); font-size:0.85rem; }
+  footer .foot-grid{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+  footer a{ color: var(--foam-dim); }
+  footer a:hover{ color: var(--teal); }
+  .disclaimer{ margin-top:18px; padding-top:18px; border-top:1px solid var(--line); font-size:0.78rem; opacity:0.8; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <nav class="nav">
+    <a href="#top" class="brand">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M16 3C10 8 6 13 6 19a10 10 0 0020 0c0-6-4-11-10-16z" fill="url(#g)"/>
+        <defs><linearGradient id="g" x1="6" y1="3" x2="26" y2="29"><stop stop-color="#2FD9C4"/><stop offset="1" stop-color="#9B6BD9"/></linearGradient></defs>
+      </svg>
+      Blox Fruit Calc
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#calculator">Calculator</a></li>
+      <li><a href="#values">Value List</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero" style="border-top:none;">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow-line"><span class="rule"></span> Blox Fruits Trading Tool</div>
+        <h1>Is your Blox Fruits trade actually worth it?</h1>
+        <p class="lede">Drop your items on one side, theirs on the other, and get an instant read on whether the trade's a win, a loss, or fair — before you hit accept.</p>
+        <div class="hero-cta">
+          <a href="#calculator" class="btn btn-primary">Open the calculator</a>
+          <a href="#values" class="btn btn-ghost">Browse value list</a>
+        </div>
+      </div>
+      <svg class="scale-svg" width="320" height="260" viewBox="0 0 320 260" aria-hidden="true">
+        <line x1="160" y1="20" x2="160" y2="200" stroke="#1F435C" stroke-width="4"/>
+        <line x1="60" y1="70" x2="260" y2="70" stroke="#1F435C" stroke-width="4"/>
+        <line x1="60" y1="70" x2="45" y2="130" stroke="#2FD9C4" stroke-width="3"/>
+        <line x1="60" y1="70" x2="75" y2="130" stroke="#2FD9C4" stroke-width="3"/>
+        <ellipse cx="60" cy="140" rx="34" ry="14" fill="none" stroke="#2FD9C4" stroke-width="3"/>
+        <line x1="260" y1="70" x2="245" y2="150" stroke="#FF7A59" stroke-width="3"/>
+        <line x1="260" y1="70" x2="275" y2="150" stroke="#FF7A59" stroke-width="3"/>
+        <ellipse cx="260" cy="160" rx="34" ry="14" fill="none" stroke="#FF7A59" stroke-width="3"/>
+        <circle cx="160" cy="70" r="9" fill="#E9B94D"/>
+        <path d="M100 220 q60 -30 120 0" stroke="#1F435C" stroke-width="4" fill="none"/>
+        <circle cx="160" cy="216" r="4" fill="#9B6BD9"/>
+      </svg>
+    </div>
+  </section>
+
+  <section id="calculator">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Trade calculator</h2>
+        <p>Add every item on each side. The calculator totals both sides using the value list below and tells you who's coming out ahead.</p>
+      </div>
+
+      <div class="calc-grid">
+        <div class="side you">
+          <h3>Your offer <span class="pill" id="youCount">0 items</span></h3>
+          <div class="picker">
+            <select id="youSelect" aria-label="Choose an item to add to your offer"></select>
+            <button type="button" id="youAdd">Add</button>
+          </div>
+          <ul class="item-list" id="youList"></ul>
+          <div class="side-total">
+            <span>Total value</span>
+            <span class="num" id="youTotal">0</span>
+          </div>
+        </div>
+
+        <div class="side them">
+          <h3>Their offer <span class="pill" id="themCount">0 items</span></h3>
+          <div class="picker">
+            <select id="themSelect" aria-label="Choose an item to add to their offer"></select>
+            <button type="button" id="themAdd">Add</button>
+          </div>
+          <ul class="item-list" id="themList"></ul>
+          <div class="side-total">
+            <span>Total value</span>
+            <span class="num" id="themTotal">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="verdict fair" id="verdict">
+        <div class="title" id="verdictTitle">Add items to both sides</div>
+        <div class="sub" id="verdictSub">The result updates automatically as you add or remove items.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>How the calculator works</h2>
+        <p>Three steps, no sign-up, no waiting on a Discord bot.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <h3>Add what you're offering</h3>
+          <p>Pick your fruits, swords, guns or accessories from the dropdown on the left. Each one adds its estimated value to your running total.</p>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <h3>Add what they're offering</h3>
+          <p>Do the same on the right for the items they're putting up. Mix and match as many as the trade actually involves.</p>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <h3>Read the verdict</h3>
+          <p>The banner below updates live, showing win, fair, or loss based on how close the two totals are — plus the exact value gap.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="values">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Blox Fruits value list</h2>
+        <p>A plain-language reference for the items in the calculator above. Values are community-style estimates, not official prices — see the note at the bottom of the page.</p>
+      </div>
+
+      <div class="filters">
+        <input type="text" id="searchBox" placeholder="Search an item, e.g. Dragon, Kitsune, Yama…">
+        <select id="typeFilter">
+          <option value="">All types</option>
+          <option value="Fruit">Fruits</option>
+          <option value="Sword">Swords</option>
+          <option value="Gun">Guns</option>
+          <option value="Accessory">Accessories</option>
+        </select>
+        <select id="rarityFilter">
+          <option value="">All rarities</option>
+          <option value="Mythical">Mythical</option>
+          <option value="Legendary">Legendary</option>
+          <option value="Rare">Rare</option>
+          <option value="Uncommon">Uncommon</option>
+        </select>
+      </div>
+
+      <div class="table-scroll">
+        <table class="values" id="valuesTable">
+          <thead>
+            <tr>
+              <th data-key="name">Item</th>
+              <th data-key="type">Type</th>
+              <th data-key="rarity">Rarity</th>
+              <th data-key="value">Value</th>
+              <th data-key="demand">Demand</th>
+            </tr>
+          </thead>
+          <tbody id="valuesBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Frequently asked questions</h2>
+      </div>
+      <div id="faqList">
+        <div class="faq-item open">
+          <div class="faq-q">How does the calculator decide win or lose?<span class="chev">+</span></div>
+          <div class="faq-a">It adds up the value of every item on your side and every item on the other side, then compares the totals. A side worth noticeably more comes out ahead; close totals are marked fair, using a small tolerance band around equal value.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Are these official Blox Fruits prices?<span class="chev">+</span></div>
+          <div class="faq-a">No — Blox Fruits doesn't publish official trade prices. These numbers are community-style estimates meant as a sensible starting point. Real trading value shifts with updates, events, and community sentiment, so treat this as a reference, not a guarantee.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">What does "demand" mean here?<span class="chev">+</span></div>
+          <div class="faq-a">Demand is how many traders currently want an item — Low, Medium, High, or Very High. A high-value item with low demand can sit unsold longer than a cheaper item everyone wants, so it's worth weighing alongside raw value.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Why isn't my item on the list?<span class="chev">+</span></div>
+          <div class="faq-a">The list covers the items traders ask about most. It's maintained by hand rather than pulled from a live feed, so brand-new releases may take a little while to be added.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Is this site affiliated with Blox Fruits or Roblox?</div>
+          <div class="faq-a">No. This is an independent fan-made tool, not affiliated with or endorsed by the Blox Fruits developers or Roblox Corporation.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>Blox Fruit Calc — an independent trading reference.</div>
+      <div><a href="#calculator">Calculator</a> · <a href="#values">Value List</a> · <a href="#faq">FAQ</a></div>
+    </div>
+    <div class="disclaimer">
+      This is an unofficial fan project and is not affiliated with, endorsed by, or connected to the creators of Blox Fruits or Roblox Corporation. All values shown are community-style estimates for reference only and are updated by hand — they are not live market data. Trade at your own judgment.
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   EDITABLE VALUE LIST
+   Update the "value" (arbitrary points, higher = worth more)
+   and "demand" fields here whenever community prices shift.
+   ============================================================ */
+const ITEMS = [
+  { name:"Leopard Fruit", type:"Fruit", rarity:"Mythical", value:8200, demand:"Very High" },
+  { name:"Dragon Fruit (East)", type:"Fruit", rarity:"Mythical", value:7600, demand:"Very High" },
+  { name:"Kitsune Fruit", type:"Fruit", rarity:"Mythical", value:6900, demand:"High" },
+  { name:"Dough Fruit", type:"Fruit", rarity:"Mythical", value:6400, demand:"High" },
+  { name:"Venom Fruit", type:"Fruit", rarity:"Mythical", value:5300, demand:"High" },
+  { name:"Portal Fruit", type:"Fruit", rarity:"Mythical", value:4900, demand:"Medium" },
+  { name:"Buddha Fruit", type:"Fruit", rarity:"Legendary", value:3600, demand:"Medium" },
+  { name:"Mammoth Fruit", type:"Fruit", rarity:"Legendary", value:3900, demand:"High" },
+  { name:"Spirit Fruit", type:"Fruit", rarity:"Legendary", value:4200, demand:"High" },
+  { name:"Gravity Fruit", type:"Fruit", rarity:"Legendary", value:3300, demand:"Medium" },
+  { name:"Quake Fruit", type:"Fruit", rarity:"Legendary", value:2600, demand:"Medium" },
+  { name:"Rumble Fruit", type:"Fruit", rarity:"Legendary", value:3100, demand:"Medium" },
+  { name:"Blizzard Fruit", type:"Fruit", rarity:"Legendary", value:2900, demand:"Medium" },
+  { name:"T-Rex Fruit", type:"Fruit", rarity:"Legendary", value:2100, demand:"Medium" },
+  { name:"Gas Fruit", type:"Fruit", rarity:"Legendary", value:2400, demand:"Low" },
+  { name:"Control Fruit", type:"Fruit", rarity:"Legendary", value:1900, demand:"Low" },
+  { name:"Magma Fruit", type:"Fruit", rarity:"Rare", value:1500, demand:"Medium" },
+  { name:"Ice Fruit", type:"Fruit", rarity:"Rare", value:900, demand:"Medium" },
+  { name:"Light Fruit", type:"Fruit", rarity:"Rare", value:850, demand:"Low" },
+  { name:"Dark Fruit", type:"Fruit", rarity:"Rare", value:820, demand:"Low" },
+  { name:"Sand Fruit", type:"Fruit", rarity:"Rare", value:600, demand:"Low" },
+  { name:"Rubber Fruit", type:"Fruit", rarity:"Rare", value:1100, demand:"Medium" },
+  { name:"Flame Fruit", type:"Fruit", rarity:"Uncommon", value:450, demand:"Low" },
+  { name:"Diamond Fruit", type:"Fruit", rarity:"Uncommon", value:500, demand:"Low" },
+  { name:"Love Fruit", type:"Fruit", rarity:"Uncommon", value:380, demand:"Low" },
+  { name:"Spike Fruit", type:"Fruit", rarity:"Uncommon", value:300, demand:"Low" },
+  { name:"Yama", type:"Sword", rarity:"Mythical", value:7200, demand:"Very High" },
+  { name:"Saddi", type:"Sword", rarity:"Legendary", value:2200, demand:"Medium" },
+  { name:"Cursed Dual Katana", type:"Sword", rarity:"Legendary", value:2600, demand:"Medium" },
+  { name:"True Triple Katana", type:"Sword", rarity:"Rare", value:1300, demand:"Medium" },
+  { name:"Soul Guitar", type:"Gun", rarity:"Legendary", value:1900, demand:"Medium" },
+  { name:"Serpent Bow", type:"Gun", rarity:"Rare", value:700, demand:"Low" },
+  { name:"Superhuman V4", type:"Accessory", rarity:"Legendary", value:1600, demand:"Medium" },
+  { name:"Electric Claw V4", type:"Accessory", rarity:"Legendary", value:1500, demand:"Medium" },
+  { name:"Dragon Talon V4", type:"Accessory", rarity:"Rare", value:900, demand:"Low" },
+  { name:"Falcon Fruit", type:"Fruit", rarity:"Rare", value:650, demand:"Low" },
+  { name:"Spring Fruit", type:"Fruit", rarity:"Uncommon", value:150, demand:"Low" },
+  { name:"Smoke Fruit", type:"Fruit", rarity:"Uncommon", value:130, demand:"Low" },
+  { name:"Bomb Fruit", type:"Fruit", rarity:"Uncommon", value:110, demand:"Low" },
+  { name:"Spin Fruit", type:"Fruit", rarity:"Uncommon", value:100, demand:"Low" }
+];
+
+const demandColor = { "Very High":"#35C98B", "High":"#2FD9C4", "Medium":"#E9B94D", "Low":"#A9C2C4" };
+
+/* ---------- populate dropdowns ---------- */
+function fillSelect(sel){
+  sel.innerHTML = '<option value="">Choose an item…</option>' +
+    ITEMS.map((it,i)=>`<option value="${i}">${it.name} (${it.value.toLocaleString()})</option>`).join('');
+}
+const youSelect = document.getElementById('youSelect');
+const themSelect = document.getElementById('themSelect');
+fillSelect(youSelect); fillSelect(themSelect);
+
+/* ---------- calculator state ---------- */
+let youItems = [];
+let themItems = [];
+
+function renderSide(items, listEl, totalEl, countEl){
+  listEl.innerHTML = items.length
+    ? items.map((it,i)=>`
+        <li class="item-row">
+          <span class="info"><span>${it.name}</span><span class="val">${it.value.toLocaleString()} pts · ${it.demand} demand</span></span>
+          <button class="remove" aria-label="Remove ${it.name}" data-idx="${i}">×</button>
+        </li>`).join('')
+    : '<li class="empty-note">No items added yet.</li>';
+  const total = items.reduce((s,it)=>s+it.value,0);
+  totalEl.textContent = total.toLocaleString();
+  countEl.textContent = items.length + (items.length===1 ? ' item' : ' items');
+  return total;
+}
+
+function renderVerdict(){
+  const youTotal = renderSide(youItems, document.getElementById('youList'), document.getElementById('youTotal'), document.getElementById('youCount'));
+  const themTotal = renderSide(themItems, document.getElementById('themList'), document.getElementById('themTotal'), document.getElementById('themCount'));
+
+  const box = document.getElementById('verdict');
+  const title = document.getElementById('verdictTitle');
+  const sub = document.getElementById('verdictSub');
+
+  if(youItems.length===0 && themItems.length===0){
+    box.className = 'verdict fair';
+    title.textContent = 'Add items to both sides';
+    sub.textContent = 'The result updates automatically as you add or remove items.';
+    return;
+  }
+
+  const diff = themTotal - youTotal;
+  const base = Math.max(youTotal, themTotal, 1);
+  const pct = Math.abs(diff) / base;
+
+  if(pct <= 0.05){
+    box.className = 'verdict fair';
+    title.textContent = 'Fair trade';
+    sub.textContent = `Both sides are within 5% of each other (gap: ${Math.abs(diff).toLocaleString()} pts).`;
+  } else if(diff > 0){
+    box.className = 'verdict win';
+    title.textContent = 'You win this trade';
+    sub.textContent = `You'd be receiving about ${diff.toLocaleString()} more points than you're giving up.`;
+  } else {
+    box.className = 'verdict lose';
+    title.textContent = 'You lose this trade';
+    sub.textContent = `You'd be giving up about ${Math.abs(diff).toLocaleString()} more points than you're receiving.`;
+  }
+}
+
+document.getElementById('youAdd').addEventListener('click', ()=>{
+  if(youSelect.value===''){ return; }
+  youItems.push(ITEMS[+youSelect.value]);
+  youSelect.value='';
+  renderVerdict();
+});
+document.getElementById('themAdd').addEventListener('click', ()=>{
+  if(themSelect.value===''){ return; }
+  themItems.push(ITEMS[+themSelect.value]);
+  themSelect.value='';
+  renderVerdict();
+});
+document.getElementById('youList').addEventListener('click', (e)=>{
+  if(e.target.matches('.remove')){ youItems.splice(+e.target.dataset.idx,1); renderVerdict(); }
+});
+document.getElementById('themList').addEventListener('click', (e)=>{
+  if(e.target.matches('.remove')){ themItems.splice(+e.target.dataset.idx,1); renderVerdict(); }
+});
+renderVerdict();
+
+/* ---------- value list table ---------- */
+let sortKey = 'value';
+let sortDir = -1;
+
+function renderTable(){
+  const q = document.getElementById('searchBox').value.trim().toLowerCase();
+  const typeF = document.getElementById('typeFilter').value;
+  const rarityF = document.getElementById('rarityFilter').value;
+
+  let rows = ITEMS.filter(it =>
+    (!q || it.name.toLowerCase().includes(q)) &&
+    (!typeF || it.type===typeF) &&
+    (!rarityF || it.rarity===rarityF)
+  );
+
+  rows.sort((a,b)=>{
+    if(a[sortKey] < b[sortKey]) return -1*sortDir;
+    if(a[sortKey] > b[sortKey]) return 1*sortDir;
+    return 0;
+  });
+
+  document.getElementById('valuesBody').innerHTML = rows.map(it => `
+    <tr>
+      <td>${it.name}</td>
+      <td>${it.type}</td>
+      <td><span class="tag ${it.rarity}">${it.rarity}</span></td>
+      <td>${it.value.toLocaleString()}</td>
+      <td><span class="demand-dot" style="background:${demandColor[it.demand]}"></span>${it.demand}</td>
+    </tr>`).join('') || '<tr><td colspan="5" style="color:var(--foam-dim);">No items match your filters.</td></tr>';
+}
+document.getElementById('searchBox').addEventListener('input', renderTable);
+document.getElementById('typeFilter').addEventListener('change', renderTable);
+document.getElementById('rarityFilter').addEventListener('change', renderTable);
+document.querySelectorAll('table.values th').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.dataset.key;
+    if(sortKey===key){ sortDir *= -1; } else { sortKey = key; sortDir = 1; }
+    renderTable();
+  });
+});
+renderTable();
+
+/* ---------- FAQ accordion ---------- */
+document.querySelectorAll('.faq-item').forEach(item=>{
+  item.querySelector('.faq-q').addEventListener('click', ()=>{
+    item.classList.toggle('open');
+  });
+});
+
+/* ---------- mobile nav ---------- */
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+navToggle.addEventListener('click', ()=>{
+  const open = navLinks.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', open);
+});
+navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>navLinks.classList.remove('open')));
+</script>
+
+</body>
+</html>
